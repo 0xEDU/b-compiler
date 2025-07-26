@@ -8,10 +8,6 @@ PATH_OBJS = ./objects/
 LEXER = lexer.l
 PARSER = parser.y
 
-# OBJS = ${SRCS:%.c=${PATH_OBJS}%.o}
-#
-# INCLUDES = -I ./includes/
-
 all: ${NAME}
 
 $(NAME): ${OBJS}
