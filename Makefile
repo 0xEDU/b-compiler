@@ -5,23 +5,21 @@ CC = gcc
 PATH_SRCS = ./sources/
 PATH_OBJS = ./objects/
 
-SRCS = main.c
+LEXER = lexer.l
+PARSER = parser.y
 
-OBJS = ${SRCS:%.c=${PATH_OBJS}%.o}
-
-INCLUDES = -I ./includes/
-CFLAGS = -Wall -Wextra -Werror
+# OBJS = ${SRCS:%.c=${PATH_OBJS}%.o}
+#
+# INCLUDES = -I ./includes/
 
 all: ${NAME}
 
 $(NAME): ${OBJS}
-	@$(CC) ${CFLAGS} ${INCLUDES} ${OBJS} -o ${NAME}
+	@mkdir -p ${PATH_OBJS}
+	@bison -d ${PATH_SRCS}${PARSER} -o ${PATH_OBJS}parser.c
+	@flex -o ${PATH_OBJS}lexer.c ${PATH_SRCS}${LEXER}
+	@${CC} -o ${NAME} ${PATH_OBJS}parser.c ${PATH_OBJS}lexer.c -lfl
 	@echo "\033[1;92m[SUCCESS] B compiler created!\033[0m"
-
-$(PATH_OBJS)%.o: $(PATH_SRCS)%.c
-	@mkdir -p $(PATH_OBJS)
-	@$(CC) ${CFLAGS} ${INCLUDES} -c $< -o $@
-	@echo "\033[1;96m[SUCCESS] Object $< created\033[0m"
 
 clean:
 	@rm -rf ${PATH_OBJS}
