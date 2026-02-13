@@ -2,23 +2,33 @@ NAME = B
 
 CC = gcc
 
-PATH_SRCS = ./sources/
-PATH_OBJS = ./objects/
+PATH_SRC = ./src/
+PATH_OBJ = ./obj/
+
+SRCS = test.c
+OBJS = $(patsubst %.c, ${PATH_OBJ}%.o, ${SRCS})
 
 LEXER = lexer.l
 PARSER = parser.y
 
+CPPFLAGS = -I./inc
+LDLIBS = -lfl
+
 all: ${NAME}
 
 $(NAME): ${OBJS}
-	@mkdir -p ${PATH_OBJS}
-	@bison -d ${PATH_SRCS}${PARSER} -o ${PATH_OBJS}parser.c
-	@flex -o ${PATH_OBJS}lexer.c ${PATH_SRCS}${LEXER}
-	@${CC} -o ${NAME} ${PATH_OBJS}parser.c ${PATH_OBJS}lexer.c -lfl
+	@mkdir -p ${PATH_OBJ}
+	@bison -d ${PARSER} -o ${PATH_OBJ}parser.c
+	@flex -o ${PATH_OBJ}lexer.c ${LEXER}
+	@${CC} ${CPPFLAGS} -o ${NAME} ${PATH_OBJ}parser.c ${PATH_OBJ}lexer.c ${OBJS} ${LDLIBS}
 	@echo "\033[1;92m[SUCCESS] B compiler created!\033[0m"
 
+${PATH_OBJ}%.o: ${PATH_SRC}%.c
+	@mkdir -p ${PATH_OBJ}
+	@${CC} ${CPPFLAGS} -c $< -o $@
+
 clean:
-	@rm -rf ${PATH_OBJS}
+	@rm -rf ${PATH_OBJ}
 	@echo "\033[1;93m[SUCCESS] Objects removed!\033[0m"
 
 fclean: clean
