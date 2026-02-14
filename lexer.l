@@ -3,15 +3,16 @@
 #include <stdio.h>
 %}
 
+WHITESPACE	[\t\n\r ]
+DIGIT		[0-9]
+ALPHA		[a-zA-Z_\b]
 %%
 
-"hello" { return HELLO_TOKEN; }
-";"     { return SEMICOLON_TOKEN; }
-.       { /* Ignore other characters */ }
-\n      { /* Ignore newlines */ }
+"("				{ return LPAREN; }
+")"				{ return RPAREN; }
+"{"				{ return LBRACE; }
+"}"				{ return RBRACE; }
+{ALPHA}+		{ printf("%s\n", yytext); return ALPHA;   }
+{WHITESPACE}+	{ /* Ignore newlines */ }
 
 %%
-
-int yywrap() {
-    return 1;
-}

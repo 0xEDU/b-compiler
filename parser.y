@@ -10,18 +10,24 @@ void yyerror(const char *s) {
 }
 %}
 
-%token HELLO_TOKEN SEMICOLON_TOKEN
+%token LPAREN RPAREN LBRACE RBRACE ALPHA
+
+%start definition
 
 %%
-program:
-    HELLO_TOKEN SEMICOLON_TOKEN { printf("Parsed 'hello;'\n"); }
-    ;
+name: ALPHA
+	;
+
+definition:
+	name LPAREN RPAREN LBRACE RBRACE
+	;
+
 %%
 
 int main() {
     yyin = stdin; // Read from standard input
     if (yyparse() == 0) {
-        printf("Parsing successful.\n");
+        printf("Parsing finished.\n");
     } else {
         printf("Parsing failed.\n");
     }
