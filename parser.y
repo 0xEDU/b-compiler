@@ -24,12 +24,18 @@ definition:
 
 %%
 
+void println(char *str) {
+	printf("%s\n", str);
+}
+
 int main() {
     yyin = stdin; // Read from standard input
-    if (yyparse() == 0) {
-        printf("Parsing finished.\n");
-    } else {
-        printf("Parsing failed.\n");
+
+	println(".intel_syntax noprefix");
+	println(".text");
+
+    if (yyparse() != 0) {
+		return 1;
     }
-    return 0;
+	return 0;
 }

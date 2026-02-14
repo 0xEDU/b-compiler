@@ -12,7 +12,7 @@ ALPHA		[a-zA-Z_\b]
 ")"				{ return RPAREN; }
 "{"				{ return LBRACE; }
 "}"				{ return RBRACE; }
-{ALPHA}+		{ printf("%s\n", yytext); return ALPHA;   }
+{ALPHA}+		{ return ALPHA; }
 {WHITESPACE}+	{ /* Ignore newlines */ }
 
 %%
