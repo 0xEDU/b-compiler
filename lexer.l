@@ -4,15 +4,15 @@
 %}
 
 WHITESPACE	[\t\n\r ]
-DIGIT		[0-9]
-ALPHA		[a-zA-Z_\b]
+ALPHA		[a-zA-Z_]
+ALNUM		[a-zA-Z_0-9]
 %%
 
-"("				{ return LPAREN; }
-")"				{ return RPAREN; }
-"{"				{ return LBRACE; }
-"}"				{ return RBRACE; }
-{ALPHA}+		{ return ALPHA; }
-{WHITESPACE}+	{ /* Ignore newlines */ }
+"("					{ return '('; }
+")"					{ return ')'; }
+"{"					{ return '{'; }
+"}"					{ return '}'; }
+{ALPHA}{ALNUM}+		{ yylval.str = strdup(yytext); return NAME; }
+{WHITESPACE}+		{ /* Ignore newlines */ }
 
 %%

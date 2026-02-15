@@ -10,16 +10,23 @@ void yyerror(const char *s) {
 }
 %}
 
-%token LPAREN RPAREN LBRACE RBRACE ALPHA
+%union {
+	char * str;
+}
+
+%token <str> NAME
 
 %start definition
 
 %%
-name: ALPHA
+name:
+	NAME
 	;
 
 definition:
-	name LPAREN RPAREN LBRACE RBRACE
+	name '(' ')' '{' '}' {
+		// printf("got identifier: %s\n", $1);
+	}
 	;
 
 %%
@@ -31,11 +38,12 @@ void println(char *str) {
 int main() {
     yyin = stdin; // Read from standard input
 
-	println(".intel_syntax noprefix");
-	println(".text");
-
     if (yyparse() != 0) {
 		return 1;
     }
+
+	println(".intel_syntax noprefix");
+	println(".text");
+
 	return 0;
 }
