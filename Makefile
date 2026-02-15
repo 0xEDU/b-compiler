@@ -12,7 +12,14 @@ LEXER = lexer.l
 PARSER = parser.y
 
 CPPFLAGS = -I./inc
-LDLIBS = -lfl
+
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	LDLIBS = -lfl
+endif
+ifeq ($(UNAME_S),Darwin)
+	LDLIBS = -ll
+endif
 
 all: ${NAME}
 
