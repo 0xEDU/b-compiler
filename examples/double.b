@@ -1,3 +1,7 @@
-foo() {}
+foo() {
+	return 42;
+}
 
-main() {}
+main() {
+	return 11;
+}

@@ -16,25 +16,56 @@ void println(char *str) {
 %}
 
 %union {
-    char* str;
+    char *str;
 }
 
 %token <str> NAME
 %type <str> name
 
+%token <str> DIGIT
+%type <str> digit
+
+%type <str> rvalue lvalue constant
+
+%token RETURN
+
 %start program
 
 %%
+digit:
+	DIGIT { $$ = $1; }
+	;
+
 name:
-    NAME { $$ = $1; }
+	NAME { $$ = $1; }
     ;
 
+constant:
+	digit { $$ = $1; }
+	;
+
+lvalue:
+	name { $$ = $1; }
+	;
+
+rvalue:
+	lvalue { $$ = $1; }
+	| constant { $$ = $1; }
+	;
+
+statement:
+	RETURN rvalue ';' {
+		printf("mov eax, %s\n", $2);
+	}
+	;
+
 definition:
-	name '(' ')' '{' '}' {
+	name '(' ')' {
         printf(".globl %s\n", $1);
         printf("%s:\n", $1);
         printf(".long %s + 4\n", $1);
         println("enter 0, 0");
+	} '{' statement '}' {
         println("leave");
         println("ret");
     }
