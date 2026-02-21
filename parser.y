@@ -26,11 +26,11 @@ void println(char *str) {
 
 %%
 name:
-    NAME { $$ = $1 }
+    NAME { $$ = $1; }
     ;
 
 definition:
-    name '(' ')' '{' '}' {
+	name '(' ')' '{' '}' {
         printf(".globl %s\n", $1);
         printf("%s:\n", $1);
         printf(".long %s + 4\n", $1);
@@ -41,7 +41,8 @@ definition:
     ;
 
 program:
-    definition
+	/* no definitions is allowed */
+   | program definition
    ;
 %%
 
